@@ -19,17 +19,26 @@ products_df = pd.DataFrame(data['products'], columns=["id", "title", "category",
 # print(products_df)
 
 reviews = []
+i = 1
 for product in products:
     for review in product["reviews"]:
         reviews.append({
+            "reviewId": i,
+            "productId": product["id"],
             "rating": review["rating"],
             "comment": review["comment"],
             "date": review["date"],
             "reviewerName": review["reviewerName"],
             "reviewerEmail": review["reviewerEmail"]
         })
-reviews_df = pd.DataFrame(reviews, columns = ["rating", "comment", "date", "reviewerName", "reviewerEmail"])         
+        i += 1
+reviews_df = pd.DataFrame(reviews, columns = ["reviewId", "productId", "rating", "comment", "date", "reviewerName", "reviewerEmail"])         
 
 reviews_df["date"] = reviews_df["date"].apply(pd.to_datetime).dt.date
 # print(reviews_df)
 # reviews_df.info()
+
+
+# merging product_df and reviews_df
+merged_df = pd.merge(products_df, reviews_df, left_on="id", right_on="productId")
+print(merged_df.head(10))

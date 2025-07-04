@@ -40,5 +40,9 @@ reviews_df["date"] = reviews_df["date"].apply(pd.to_datetime).dt.date
 
 
 # merging product_df and reviews_df
-merged_df = pd.merge(products_df, reviews_df, left_on="id", right_on="productId")
-print(merged_df.head(10))
+merged_df = pd.merge(products_df, reviews_df, left_on="id", right_on="productId", how="inner")#[["productId", "title", "category"]]
+# print(merged_df.head(10))
+
+# calculating price after discount
+products_df["actualPrice"] = (products_df["price"] - (products_df["price"] * 0.01 * products_df["discountPercentage"])).round(2)
+print(products_df)
